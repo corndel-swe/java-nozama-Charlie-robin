@@ -69,4 +69,22 @@ public class UserRepository {
         }
     }
 
+    public static User logIn(Auth auth) throws SQLException {
+        String query = "SELECT * FROM users WHERE users.username = ? AND users.password = ?;";
+        try (var connection = DB.getConnection();
+             var statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, auth.getUserName());
+            statement.setString(2, auth.getPassword());
+
+
+            try (var rs = statement.executeQuery();) {
+                while (!rs.next()) {
+                    return null;
+                }
+
+                return User.ofResultSet(rs);
+            }
+        }
+    }
 }

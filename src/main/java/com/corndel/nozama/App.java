@@ -38,7 +38,13 @@ public class App {
                     user = UserRepository.create(user);
                     ctx.status(HttpStatus.CREATED).json(user);
                 });
-
+        app.post(
+                "/users/login",
+                ctx -> {
+                    Auth auth = ctx.bodyAsClass(Auth.class);
+                    User user = UserRepository.logIn(auth);
+                    ctx.status(HttpStatus.OK).json(user);
+                });
         app.get(
                 "/products",
                 ctx -> {
@@ -61,14 +67,12 @@ public class App {
                     ctx.status(HttpStatus.OK).json(products);
                 }
         );
-
         app.post("/products",
                 ctx -> {
                     Product product = ctx.bodyAsClass(Product.class);
                     product = ProductRepository.create(product);
                     ctx.status(HttpStatus.CREATED).json(product);
                 });
-
     }
 
     public Javalin javalinApp() {
