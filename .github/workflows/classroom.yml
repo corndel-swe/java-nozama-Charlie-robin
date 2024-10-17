@@ -50,16 +50,6 @@ jobs:
           timeout: 1
           max-score: 1
 
-      - name: Day 1 Exercise 4
-        id: D1E4
-        uses: classroom-resources/autograding-command-grader@v1
-        with:
-          test-name: D1E4
-          setup-command: ''
-          command: './mvnw test -Dtest=D1E4Tests'
-          timeout: 1
-          max-score: 1
-
       - name: Day 2 Exercise 1
         id: D2E1
         uses: classroom-resources/autograding-command-grader@v1
@@ -116,11 +106,10 @@ jobs:
           D1E1_RESULTS: '${{steps.D1E1.outputs.result}}'
           D1E2_RESULTS: '${{steps.D1E2.outputs.result}}'
           D1E3_RESULTS: '${{steps.D1E3.outputs.result}}'
-          D1E4_RESULTS: '${{steps.D1E4.outputs.result}}'
           D2E1_RESULTS: '${{steps.D2E1.outputs.result}}'
           D2E2_RESULTS: '${{steps.D2E2.outputs.result}}'
           D2E3_RESULTS: '${{steps.D2E3.outputs.result}}'
           D3E1_RESULTS: '${{steps.D3E1.outputs.result}}'
           D3E2_RESULTS: '${{steps.D3E2.outputs.result}}'
         with:
-          runners: D1E1,D1E2,D1E3,D1E4,D2E1,D2E2,D2E3,D3E1,D3E2
+          runners: D1E1,D1E2,D1E3,D2E1,D2E2,D2E3,D3E1,D3E2
