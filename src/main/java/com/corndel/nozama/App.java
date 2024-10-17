@@ -2,8 +2,10 @@ package com.corndel.nozama;
 
 import com.corndel.nozama.models.Auth;
 import com.corndel.nozama.models.Product;
+import com.corndel.nozama.models.Review;
 import com.corndel.nozama.models.User;
 import com.corndel.nozama.repositories.ProductRepository;
+import com.corndel.nozama.repositories.ReviewRepository;
 import com.corndel.nozama.repositories.UserRepository;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
@@ -80,6 +82,15 @@ public class App {
                     Product product = ctx.bodyAsClass(Product.class);
                     product = ProductRepository.create(product);
                     ctx.status(HttpStatus.CREATED).json(product);
+                });
+        app.post("/products/{productId}/reviews",
+                ctx -> {
+                    Review review = ctx.bodyAsClass(Review.class);
+                    var id = Integer.parseInt(ctx.pathParam("productId"));
+                    System.out.println(id);
+                    review.setId(id);
+                    review = ReviewRepository.postReview(review);
+                    ctx.status(HttpStatus.CREATED).json(review);
                 });
     }
 
