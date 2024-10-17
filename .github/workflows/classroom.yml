@@ -1,6 +1,5 @@
 name: Autograding Tests
-env:
-  DB_URL:${{ secrets.DB_URL }}
+
 'on':
   - push
   - repository_dispatch
@@ -10,6 +9,8 @@ permissions:
   contents: read
 jobs:
   run-autograding-tests:
+    env:
+      DB_URL:${{ secrets.DB_URL }}
     runs-on: ubuntu-latest
     if: github.actor != 'github-classroom[bot]'
     steps:
