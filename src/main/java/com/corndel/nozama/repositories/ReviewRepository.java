@@ -1,13 +1,13 @@
 package com.corndel.nozama.repositories;
 
 import com.corndel.nozama.DB;
-import com.corndel.nozama.models.Product;
 import com.corndel.nozama.models.Review;
-import com.corndel.nozama.models.User;
-
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReviewRepository {
 
@@ -48,4 +48,27 @@ public class ReviewRepository {
             }
         }
     }
+
+    public static Map<String, Float> getAverageRating(int productId) throws SQLException {
+
+        var query = "SELECT AVG(reviews.rating) FROM reviews " +
+                "JOIN products ON products.id = reviews.productId " +
+                "WHERE reviews.productId = ?";
+
+        Map<String, Float> averageRating = new HashMap<>();
+        try (var connection = DB.getConnection();
+             var stmt = connection.prepareStatement(query)) {
+
+            stmt.setInt(1, productId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    averageRating.put("averageRating", rs.getFloat(1));
+                }
+            }
+        }
+        return averageRating;
+    }
+
+
 }

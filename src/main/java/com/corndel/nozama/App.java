@@ -11,6 +11,7 @@ import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 
 import java.util.List;
+import java.util.Map;
 
 public class App {
     private Javalin app;
@@ -98,6 +99,13 @@ public class App {
                     var id = Integer.parseInt(ctx.pathParam("productId"));
                     List<Review> review = ReviewRepository.getAllByProductId(id);
                     ctx.status(HttpStatus.OK).json(review);
+                });
+
+        app.get("/products/{productId}/reviews/average",
+                ctx -> {
+                    var id = Integer.parseInt(ctx.pathParam("productId"));
+                    Map<String, Float> average = ReviewRepository.getAverageRating(id);
+                    ctx.status(HttpStatus.OK).json(average);
                 });
     }
 
