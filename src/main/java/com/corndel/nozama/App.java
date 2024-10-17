@@ -10,6 +10,8 @@ import com.corndel.nozama.repositories.UserRepository;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 
+import java.util.List;
+
 public class App {
     private Javalin app;
 
@@ -87,10 +89,15 @@ public class App {
                 ctx -> {
                     Review review = ctx.bodyAsClass(Review.class);
                     var id = Integer.parseInt(ctx.pathParam("productId"));
-                    System.out.println(id);
                     review.setId(id);
                     review = ReviewRepository.postReview(review);
                     ctx.status(HttpStatus.CREATED).json(review);
+                });
+        app.get("/products/{productId}/reviews",
+                ctx -> {
+                    var id = Integer.parseInt(ctx.pathParam("productId"));
+                    List<Review> review = ReviewRepository.getAllByProductId(id);
+                    ctx.status(HttpStatus.OK).json(review);
                 });
     }
 
