@@ -27,7 +27,7 @@ public class UserRepository {
     }
 
     public static User findById(int id) throws SQLException {
-        var query = "SELECT username, firstName, lastName, email, avatar FROM users WHERE id = ?";
+        var query = "SELECT * FROM users WHERE id = ?";
 
         try (var con = DB.getConnection();
              var stmt = con.prepareStatement(query)) {
@@ -79,6 +79,25 @@ public class UserRepository {
 
 
             try (var rs = statement.executeQuery();) {
+                while (!rs.next()) {
+                    return null;
+                }
+
+                return User.ofResultSet(rs);
+            }
+        }
+    }
+
+    public static User deleteById(int id) throws SQLException {
+        var query = "DELETE FROM users WHERE id = ? RETURNING *";
+
+        try (var con = DB.getConnection();
+             var stmt = con.prepareStatement(query)) {
+
+            stmt.setInt(1, id);
+
+            try (var rs = stmt.executeQuery()) {
+
                 while (!rs.next()) {
                     return null;
                 }
