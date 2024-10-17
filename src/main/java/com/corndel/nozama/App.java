@@ -7,6 +7,7 @@ import com.corndel.nozama.models.User;
 import com.corndel.nozama.repositories.ProductRepository;
 import com.corndel.nozama.repositories.ReviewRepository;
 import com.corndel.nozama.repositories.UserRepository;
+import controllers.ProductController;
 import io.javalin.Javalin;
 import io.javalin.http.HttpStatus;
 
@@ -60,32 +61,18 @@ public class App {
 
         app.get(
                 "/products",
-                ctx -> {
-                    ctx.status(HttpStatus.OK).json(ProductRepository.findAll());
-                }
+                ProductController::findAll
         );
+        app.post("/products",
+                ProductController::create);
         app.get(
                 "/products/{productId}",
-                ctx -> {
-                    var id = ctx.pathParam("productId");
-                    var product = ProductRepository.findById(id);
-                    ctx.status(HttpStatus.OK).json(product);
-                }
+                ProductController::findById
         );
         app.get(
                 "/products/category/{categoryId}",
-                ctx -> {
-                    var id = Integer.parseInt(ctx.pathParam("categoryId"));
-                    var products = ProductRepository.findByCategory(id);
-                    ctx.status(HttpStatus.OK).json(products);
-                }
+                ProductController::findByCategory
         );
-        app.post("/products",
-                ctx -> {
-                    Product product = ctx.bodyAsClass(Product.class);
-                    product = ProductRepository.create(product);
-                    ctx.status(HttpStatus.CREATED).json(product);
-                });
         app.post("/products/{productId}/reviews",
                 ctx -> {
                     Review review = ctx.bodyAsClass(Review.class);

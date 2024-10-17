@@ -25,13 +25,13 @@ public class ProductRepository {
         }
     }
 
-    public static Product findById(String id) throws SQLException {
+    public static Product findById(int id) throws SQLException {
         var query = "SELECT * FROM products WHERE id = ?";
 
         try (var con = DB.getConnection();
              var stmt = con.prepareStatement(query);
         ) {
-            stmt.setString(1, id);
+            stmt.setInt(1, id);
 
             try (var rs = stmt.executeQuery()) {
 
