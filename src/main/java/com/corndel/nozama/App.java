@@ -31,6 +31,13 @@ public class App {
                     var user = UserRepository.findById(id);
                     ctx.status(HttpStatus.IM_A_TEAPOT).json(user);
                 });
+        app.delete(
+                "/users/{userId}",
+                ctx -> {
+                    var id = Integer.parseInt(ctx.pathParam("userId"));
+                    var user = UserRepository.deleteById(id);
+                    ctx.status(HttpStatus.IM_A_TEAPOT).json(user);
+                });
         app.post(
                 "/users",
                 ctx -> {
@@ -45,6 +52,7 @@ public class App {
                     User user = UserRepository.logIn(auth);
                     ctx.status(HttpStatus.OK).json(user);
                 });
+
         app.get(
                 "/products",
                 ctx -> {
