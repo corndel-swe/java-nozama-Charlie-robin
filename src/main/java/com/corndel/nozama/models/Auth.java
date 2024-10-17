@@ -21,17 +21,4 @@ public class Auth {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Auth auth = (Auth) o;
-        return Objects.equals(userName, auth.userName) && Objects.equals(password, auth.password);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(userName, password);
-    }
 }
