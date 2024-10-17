@@ -1,5 +1,6 @@
 name: Autograding Tests
-env: DB_URL=${{ secrets.DB_URL }}
+env:
+  DB_URL:${{ secrets.DB_URL }}
 'on':
   - push
   - repository_dispatch
