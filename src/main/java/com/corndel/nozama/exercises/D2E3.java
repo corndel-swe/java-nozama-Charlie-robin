@@ -1,6 +1,7 @@
 package com.corndel.nozama.exercises;
 
 import io.javalin.Javalin;
+import io.javalin.http.HttpStatus;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -10,11 +11,11 @@ import java.util.HashMap;
 public class D2E3 {
   /**
    * Creates a Javalin app with three endpoints:
-   * 
+   *
    * - GET /alarms responds with all alarms in the repository as JSON
    * - GET /alarms/{id} responds with the alarm with the given id as JSON
    * - POST /alarms creates a new alarm based on the request body
-   * 
+   *
    * @see https://tech-docs.corndel.com/javalin/body-and-headers.html
    * @return a configured Javalin instance
    */
@@ -29,18 +30,26 @@ public class D2E3 {
         "/alarms",
         ctx -> {
           // TODO
+          ctx.json(AlarmRepository.findAll());
+
         });
 
     app.get(
         "/alarms/{id}",
         ctx -> {
           // TODO
+          var id = Integer.parseInt(ctx.pathParam("id"));
+
+          ctx.json(AlarmRepository.findById(id));
         });
 
     app.post(
         "/alarms",
         ctx -> {
           // TODO
+          var alarm = ctx.bodyAsClass(Alarm.class);
+          AlarmRepository.create(alarm.getTime(), alarm.getMessage());
+          ctx.status(HttpStatus.CREATED).json(alarm);
         });
 
     return app;
