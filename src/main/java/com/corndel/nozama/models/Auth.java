@@ -1,17 +1,27 @@
 package com.corndel.nozama.models;
 
-import java.util.Objects;
+
+import io.javalin.http.Context;
+import io.javalin.validation.ValidationException;
 
 public class Auth {
-    private String userName;
-    private String password;
 
-    public String getUserName() {
-        return userName;
+    public static Auth of(Context context) throws ValidationException {
+        return context.bodyValidator(Auth.class)
+                .check((auth) -> auth.getUsername() != null && !auth.getUsername().isBlank(), "Username can not be null, or Empty")
+                .check((user) -> user.getPassword() != null && !user.getPassword().isBlank(), "Password can not be null, or Empty")
+                .get();
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    private String username;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

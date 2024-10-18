@@ -2,7 +2,6 @@ package com.corndel.nozama.repositories;
 
 import com.corndel.nozama.DB;
 import com.corndel.nozama.models.Auth;
-import com.corndel.nozama.models.Product;
 import com.corndel.nozama.models.User;
 
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ public class UserRepository {
 
             var users = new ArrayList<User>();
             while (rs.next()) {
-                users.add(User.ofResultSet(rs));
+                users.add(User.of(rs));
             }
 
             return users;
@@ -40,7 +39,7 @@ public class UserRepository {
                     return null;
                 }
 
-                return User.ofResultSet(rs);
+                return User.of(rs);
 
             }
         }
@@ -64,7 +63,7 @@ public class UserRepository {
                     return null;
                 }
 
-                return User.ofResultSet(rs);
+                return User.of(rs);
             }
         }
     }
@@ -74,7 +73,7 @@ public class UserRepository {
         try (var connection = DB.getConnection();
              var statement = connection.prepareStatement(query)) {
 
-            statement.setString(1, auth.getUserName());
+            statement.setString(1, auth.getUsername());
             statement.setString(2, auth.getPassword());
 
 
@@ -83,7 +82,7 @@ public class UserRepository {
                     return null;
                 }
 
-                return User.ofResultSet(rs);
+                return User.of(rs);
             }
         }
     }
@@ -102,7 +101,7 @@ public class UserRepository {
                     return null;
                 }
 
-                return User.ofResultSet(rs);
+                return User.of(rs);
             }
         }
     }

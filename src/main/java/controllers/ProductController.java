@@ -15,26 +15,17 @@ public class ProductController {
 
     // CREATE
     public static void create(Context context) {
+        Product product = Product.of(context);
 
         try {
-            Product product = context.bodyValidator(Product.class)
-                    .check((p) -> p.getName() != null && !p.getName().isBlank(), "Name can not be null, or Empty")
-                    .check((p) -> p.getDescription() != null && !p.getDescription().isBlank(), "Description can not be null, or Empty")
-                    .check((p) -> p.getPrice() >= 0, "Price must be a positive number")
-                    .check((p) -> p.getStockQuantity() >= 0, "StockQuantity must be a positive number")
-                    .check((p) -> p.getImageURL() != null && !p.getImageURL().isBlank(), "ImageURL can not be null, or Empty")
-                    .get();
-
             product = ProductRepository.create(product);
 
-            if (product == null) throw new SQLException();
+            if (product == null) throw new NotFoundResponse();
 
             context.status(HttpStatus.CREATED).json(product);
 
         } catch (SQLException e) {
             throw new NotFoundResponse();
-        } catch (ValidationException e) {
-            throw new BadRequestResponse(e.getMessage());
         }
     }
 
@@ -44,24 +35,19 @@ public class ProductController {
         try {
             context.status(HttpStatus.OK).json(ProductRepository.findAll());
         } catch (SQLException e) {
-            throw new NotFoundResponse(e.getMessage());
+            throw new NotFoundResponse();
         }
     }
 
     public static void findById(Context context) {
         try {
-            Integer id = context.queryParamAsClass("productId", Integer.class)
-                    .getOrThrow((m) -> {
-                        throw new IllegalArgumentException();
-                    });
+            Integer id = context.pathParamAsClass("productId", Integer.class).get();
 
             Product product = ProductRepository.findById(id);
 
-            if (product != null) {
-                context.status(HttpStatus.OK).json(product);
-            } else {
-                throw new NotFoundResponse();
-            }
+            if (product == null) throw new NotFoundResponse();
+
+            context.status(HttpStatus.OK).json(product);
 
         } catch (SQLException e) {
             throw new NotFoundResponse();
@@ -69,7 +55,7 @@ public class ProductController {
     }
 
     public static void findByCategory(Context context) {
-        int id = context.queryParamAsClass("productId", Integer.class)
+        int id = context.pathParamAsClass("categoryId", Integer.class)
                 .getOrThrow((m) -> {
                     throw new IllegalArgumentException();
                 });

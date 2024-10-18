@@ -18,7 +18,7 @@ public class ProductRepository {
 
             var products = new ArrayList<Product>();
             while (rs.next()) {
-                products.add(Product.ofResultSet(rs));
+                products.add(Product.of(rs));
             }
 
             return products;
@@ -39,7 +39,7 @@ public class ProductRepository {
                     return null;
                 }
 
-                return Product.ofResultSet(rs);
+                return Product.of(rs);
             }
         }
     }
@@ -58,7 +58,7 @@ public class ProductRepository {
             try (var rs = stmt.executeQuery()) {
                 var products = new ArrayList<Product>();
                 while (rs.next()) {
-                    products.add(Product.ofResultSet(rs));
+                    products.add(Product.of(rs));
                 }
 
                 return products;
@@ -84,7 +84,7 @@ public class ProductRepository {
                     return null;
                 }
 
-                return Product.ofResultSet(rs);
+                return Product.of(rs);
             }
         }
     }
