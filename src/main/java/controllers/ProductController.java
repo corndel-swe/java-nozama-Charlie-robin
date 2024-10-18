@@ -2,6 +2,7 @@ package controllers;
 
 import com.corndel.nozama.models.Product;
 import com.corndel.nozama.repositories.ProductRepository;
+import com.corndel.nozama.utils.PathParam;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -14,6 +15,7 @@ import java.util.List;
 public class ProductController {
 
     // CREATE
+
     public static void create(Context context) {
         Product product = Product.of(context);
 
@@ -25,7 +27,7 @@ public class ProductController {
             context.status(HttpStatus.CREATED).json(product);
 
         } catch (SQLException e) {
-            throw new NotFoundResponse();
+            throw new NotFoundResponse(e.getMessage());
         }
     }
 
@@ -35,14 +37,14 @@ public class ProductController {
         try {
             context.status(HttpStatus.OK).json(ProductRepository.findAll());
         } catch (SQLException e) {
-            throw new NotFoundResponse();
+            throw new NotFoundResponse(e.getMessage());
         }
     }
 
     public static void findById(Context context) {
-        try {
-            Integer id = context.pathParamAsClass("productId", Integer.class).get();
+        int id = PathParam.getIntegerOrThrow(context, "productId");
 
+        try {
             Product product = ProductRepository.findById(id);
 
             if (product == null) throw new NotFoundResponse();
@@ -50,21 +52,18 @@ public class ProductController {
             context.status(HttpStatus.OK).json(product);
 
         } catch (SQLException e) {
-            throw new NotFoundResponse();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public static void findByCategory(Context context) {
-        int id = context.pathParamAsClass("categoryId", Integer.class)
-                .getOrThrow((m) -> {
-                    throw new IllegalArgumentException();
-                });
+        int id = PathParam.getIntegerOrThrow(context, "categoryId");
 
         try {
             List<Product> products = ProductRepository.findByCategory(id);
             context.status(HttpStatus.OK).json(products);
         } catch (SQLException e) {
-            throw new NotFoundResponse();
+            throw new RuntimeException(e.getMessage());
         }
     }
 

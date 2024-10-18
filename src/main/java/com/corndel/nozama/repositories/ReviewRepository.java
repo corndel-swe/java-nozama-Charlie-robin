@@ -21,6 +21,7 @@ public class ReviewRepository {
 
             try (var rs = stmt.executeQuery()) {
                 var reviews = new ArrayList<Review>();
+
                 while (rs.next()) {
                     reviews.add(Review.of(rs));
                 }
@@ -40,11 +41,7 @@ public class ReviewRepository {
             statement.setString(4, review.getReviewText());
 
             try (var rs = statement.executeQuery();) {
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return Review.of(rs);
+                return !rs.next() ? null : Review.of(rs);
             }
         }
     }

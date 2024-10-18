@@ -21,7 +21,7 @@ public class App {
 
     public App() {
         app = Javalin.create();
-        app.get("/", UserController::findAll);
+        app.get("/users", UserController::findAll);
         app.get("/users/{userId}", UserController::findById);
         app.delete("/users/{userId}", UserController::delete);
         app.post("/users", UserController::create);
@@ -33,9 +33,18 @@ public class App {
         app.post("/products/{productId}/reviews", ReviewController::create);
         app.get("/products/{productId}/reviews", ReviewController::getAllByProductId);
         app.get("/products/{productId}/reviews/average", ReviewController::getAverageRatingByProductId);
+
+        app.exception(RuntimeException.class, (e, ctx) -> {
+            ctx.status(500);
+            ctx.result(e.getMessage());
+        });
+
     }
 
     public Javalin javalinApp() {
         return app;
     }
+
+
+
 }

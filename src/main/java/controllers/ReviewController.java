@@ -2,6 +2,7 @@ package controllers;
 
 import com.corndel.nozama.models.Review;
 import com.corndel.nozama.repositories.ReviewRepository;
+import com.corndel.nozama.utils.PathParam;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
@@ -13,8 +14,8 @@ import java.util.Map;
 public class ReviewController {
 
     public static void create(Context context) {
+        int id = PathParam.getIntegerOrThrow(context, "productId");
         Review review = Review.of(context);
-        var id = Integer.parseInt(context.pathParam("productId"));
         review.setId(id);
         try {
             review = ReviewRepository.create(review);
@@ -28,7 +29,7 @@ public class ReviewController {
     }
 
     public static void getAllByProductId(Context context) {
-        var id = Integer.parseInt(context.pathParam("productId"));
+        int id = PathParam.getIntegerOrThrow(context, "productId");
         try {
             List<Review> review = ReviewRepository.getAllByProductId(id);
             context.status(HttpStatus.OK).json(review);
@@ -38,7 +39,7 @@ public class ReviewController {
     }
 
     public static void getAverageRatingByProductId(Context context) {
-        var id = Integer.parseInt(context.pathParam("productId"));
+        int id = PathParam.getIntegerOrThrow(context, "productId");
         try {
             Map<String, Float> average = ReviewRepository.getAverageRatingByProductId(id);
             context.status(HttpStatus.OK).json(average);

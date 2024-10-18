@@ -17,6 +17,7 @@ public class ProductRepository {
              var rs = stmt.executeQuery(query);) {
 
             var products = new ArrayList<Product>();
+
             while (rs.next()) {
                 products.add(Product.of(rs));
             }
@@ -29,17 +30,11 @@ public class ProductRepository {
         var query = "SELECT * FROM products WHERE id = ?";
 
         try (var con = DB.getConnection();
-             var stmt = con.prepareStatement(query);
-        ) {
+             var stmt = con.prepareStatement(query)) {
             stmt.setInt(1, id);
 
             try (var rs = stmt.executeQuery()) {
-
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return Product.of(rs);
+                return !rs.next() ? null : Product.of(rs);
             }
         }
     }
@@ -57,6 +52,7 @@ public class ProductRepository {
 
             try (var rs = stmt.executeQuery()) {
                 var products = new ArrayList<Product>();
+
                 while (rs.next()) {
                     products.add(Product.of(rs));
                 }
@@ -80,29 +76,8 @@ public class ProductRepository {
             statement.setString(5, product.getImageURL());
 
             try (var rs = statement.executeQuery();) {
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return Product.of(rs);
+                return !rs.next() ? null : Product.of(rs);
             }
-        }
-    }
-
-
-    public static void main(String[] args) {
-
-        try {
-//
-//            System.out.println(findAll());
-//            Product product = findById("72");
-//
-//            assert product != null;
-//            System.out.println(create(product));
-
-            System.out.println(findByCategory(1));
-        } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
         }
     }
 }

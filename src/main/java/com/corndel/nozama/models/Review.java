@@ -21,7 +21,7 @@ public class Review {
     public static Review of(Context context) {
         return context.bodyValidator(Review.class)
                 .check((review) -> review.getRating() >= 1 && review.getRating() <= 5, "Name can not be null, or Empty")
-                .check((review) -> review.getReviewDate() != null && !review.getReviewDate().isBlank(), "Name can not be null, or Empty")
+                .check((review) -> review.getReviewText() != null && !review.getReviewText().isBlank(), "Name can not be null, or Empty")
                 .get();
     }
 

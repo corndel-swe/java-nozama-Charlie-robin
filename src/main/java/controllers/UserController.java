@@ -3,6 +3,7 @@ package controllers;
 import com.corndel.nozama.models.Auth;
 import com.corndel.nozama.models.User;
 import com.corndel.nozama.repositories.UserRepository;
+import com.corndel.nozama.utils.PathParam;
 import io.javalin.http.BadRequestResponse;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
@@ -37,10 +38,8 @@ public class UserController {
     }
 
     public static void findById(Context context) {
-        Integer id = context.pathParamAsClass("userId", Integer.class)
-                .getOrThrow((m) -> {
-                    throw new IllegalArgumentException();
-                });
+        int id = PathParam.getIntegerOrThrow(context, "userId");
+
         try {
             User user = UserRepository.findById(id);
 
@@ -70,10 +69,7 @@ public class UserController {
     // DELETE
 
     public static void delete(Context context) {
-        Integer id = context.pathParamAsClass("userId", Integer.class)
-                .getOrThrow((m) -> {
-                    throw new IllegalArgumentException();
-                });
+        int id = PathParam.getIntegerOrThrow(context, "userId");
 
         try {
             User user = UserRepository.deleteById(id);

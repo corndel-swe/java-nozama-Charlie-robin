@@ -17,6 +17,7 @@ public class UserRepository {
              var rs = stmt.executeQuery(query);) {
 
             var users = new ArrayList<User>();
+
             while (rs.next()) {
                 users.add(User.of(rs));
             }
@@ -35,12 +36,7 @@ public class UserRepository {
 
             try (var rs = stmt.executeQuery()) {
 
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return User.of(rs);
-
+                return !rs.next() ? null : User.of(rs);
             }
         }
     }
@@ -59,11 +55,8 @@ public class UserRepository {
             statement.setString(6, user.getPassword());
 
             try (var rs = statement.executeQuery();) {
-                while (!rs.next()) {
-                    return null;
-                }
 
-                return User.of(rs);
+                return !rs.next() ? null : User.of(rs);
             }
         }
     }
@@ -78,11 +71,7 @@ public class UserRepository {
 
 
             try (var rs = statement.executeQuery();) {
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return User.of(rs);
+                return !rs.next() ? null : User.of(rs);
             }
         }
     }
@@ -97,11 +86,7 @@ public class UserRepository {
 
             try (var rs = stmt.executeQuery()) {
 
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return User.of(rs);
+                return !rs.next() ? null : User.of(rs);
             }
         }
     }
