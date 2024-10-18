@@ -21,8 +21,9 @@ public class ReviewRepository {
 
             try (var rs = stmt.executeQuery()) {
                 var reviews = new ArrayList<Review>();
+
                 while (rs.next()) {
-                    reviews.add(Review.ofResultSet(rs));
+                    reviews.add(Review.of(rs));
                 }
 
                 return reviews;
@@ -30,7 +31,7 @@ public class ReviewRepository {
         }
     }
 
-    public static Review postReview(Review review) throws SQLException {
+    public static Review create(Review review) throws SQLException {
         var query = "INSERT INTO reviews (productId,userId,rating,reviewText) VALUES (?,?,?,?) RETURNING *";
 
         try (var con = DB.getConnection(); var statement = con.prepareStatement(query)) {
@@ -40,16 +41,12 @@ public class ReviewRepository {
             statement.setString(4, review.getReviewText());
 
             try (var rs = statement.executeQuery();) {
-                while (!rs.next()) {
-                    return null;
-                }
-
-                return Review.ofResultSet(rs);
+                return !rs.next() ? null : Review.of(rs);
             }
         }
     }
 
-    public static Map<String, Float> getAverageRating(int productId) throws SQLException {
+    public static Map<String, Float> getAverageRatingByProductId(int productId) throws SQLException {
 
         var query = "SELECT AVG(reviews.rating) FROM reviews " +
                 "JOIN products ON products.id = reviews.productId " +

@@ -1,13 +1,16 @@
 package com.corndel.nozama.models;
 
+import io.javalin.http.Context;
+import io.javalin.validation.ValidationException;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Product {
 
-    public static Product ofResultSet(ResultSet rs) throws SQLException {
+    public static Product of(ResultSet rs) throws SQLException {
         Product product = new Product();
-        product.setId(rs.getString("id"));
+        product.setId(rs.getInt("id"));
         product.setName(rs.getString("name"));
         product.setDescription(rs.getString("description"));
         product.setImageURL(rs.getString("imageURL"));
@@ -16,8 +19,17 @@ public class Product {
         return product;
     }
 
+    public static Product of(Context context) throws ValidationException {
+        return context.bodyValidator(Product.class)
+                .check((p) -> p.getName() != null && !p.getName().isBlank(), "Name can not be null, or Empty")
+                .check((p) -> p.getDescription() != null && !p.getDescription().isBlank(), "Description can not be null, or Empty")
+                .check((p) -> p.getPrice() >= 0, "Price must be a positive number")
+                .check((p) -> p.getStockQuantity() >= 0, "StockQuantity must be a positive number")
+                .check((p) -> p.getImageURL() != null && !p.getImageURL().isBlank(), "ImageURL can not be null, or Empty")
+                .get();
+    }
 
-    private String id;
+    private int id;
     private String name;
     private String description;
     private String imageURL;
@@ -27,11 +39,11 @@ public class Product {
     public Product() {
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

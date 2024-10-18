@@ -1,11 +1,13 @@
 package com.corndel.nozama.models;
 
+import io.javalin.http.Context;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Review {
 
-    public static Review ofResultSet(ResultSet rs) throws SQLException {
+    public static Review of(ResultSet rs) throws SQLException {
         Review review = new Review();
         review.setId(rs.getInt("id"));
         review.setProductId(rs.getInt("productId"));
@@ -14,6 +16,13 @@ public class Review {
         review.setReviewText(rs.getString("reviewText"));
         review.setReviewDate(rs.getString("reviewDate"));
         return review;
+    }
+
+    public static Review of(Context context) {
+        return context.bodyValidator(Review.class)
+                .check((review) -> review.getRating() >= 1 && review.getRating() <= 5, "Name can not be null, or Empty")
+                .check((review) -> review.getReviewText() != null && !review.getReviewText().isBlank(), "Name can not be null, or Empty")
+                .get();
     }
 
     private int id;
