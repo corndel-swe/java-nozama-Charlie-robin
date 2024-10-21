@@ -13,11 +13,14 @@ import java.sql.SQLException;
 
 public class UserController {
 
+    private static final UserRepository userRepository = new UserRepository();
+
     // CREATE
+
     public static void create(Context context) {
         User user = User.of(context);
         try {
-            user = UserRepository.create(user);
+            user = userRepository.create(user);
 
             if (user == null) throw new NotFoundResponse();
 
@@ -31,7 +34,7 @@ public class UserController {
 
     public static void findAll(Context context) {
         try {
-            context.json(UserRepository.findAll());
+            context.json(userRepository.findAll());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -41,7 +44,7 @@ public class UserController {
         int id = PathParam.getIntegerOrThrow(context, "userId");
 
         try {
-            User user = UserRepository.findById(id);
+            User user = userRepository.findById(id);
 
             if (user == null) throw new NotFoundResponse();
 
@@ -54,7 +57,7 @@ public class UserController {
     public static void login(Context context) {
         Auth auth = Auth.of(context);
         try {
-            User user = UserRepository.logIn(auth);
+            User user = userRepository.logIn(auth);
 
             if (user == null) throw new NotFoundResponse();
 
@@ -72,7 +75,7 @@ public class UserController {
         int id = PathParam.getIntegerOrThrow(context, "userId");
 
         try {
-            User user = UserRepository.deleteById(id);
+            User user = userRepository.deleteById(id);
 
             if (user == null) throw new NotFoundResponse();
 

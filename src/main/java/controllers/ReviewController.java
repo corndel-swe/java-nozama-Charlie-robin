@@ -13,12 +13,16 @@ import java.util.Map;
 
 public class ReviewController {
 
+    private static final ReviewRepository reviewRepository = new ReviewRepository();
+
+    // CREATE
+
     public static void create(Context context) {
         int id = PathParam.getIntegerOrThrow(context, "productId");
         Review review = Review.of(context);
         review.setId(id);
         try {
-            review = ReviewRepository.create(review);
+            review = reviewRepository.create(review);
 
             if (review == null) throw new NotFoundResponse();
 
@@ -28,23 +32,29 @@ public class ReviewController {
         }
     }
 
-    public static void getAllByProductId(Context context) {
+    // READ
+
+    public static void findAllByProductId(Context context) {
         int id = PathParam.getIntegerOrThrow(context, "productId");
         try {
-            List<Review> review = ReviewRepository.getAllByProductId(id);
+            List<Review> review = reviewRepository.findAllByProductId(id);
             context.status(HttpStatus.OK).json(review);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void getAverageRatingByProductId(Context context) {
+    public static void findAverageRatingByProductId(Context context) {
         int id = PathParam.getIntegerOrThrow(context, "productId");
         try {
-            Map<String, Float> average = ReviewRepository.getAverageRatingByProductId(id);
+            Map<String, Float> average = reviewRepository.findAverageRatingByProductId(id);
             context.status(HttpStatus.OK).json(average);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
+
+    // UPDATE
+
+    // DELETE
 }
