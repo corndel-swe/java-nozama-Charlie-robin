@@ -9,14 +9,14 @@ import com.corndel.nozama.repositories.UserRepository;
 
 public class D1E3Tests {
 
-  @Test
-  public void ReturnsAUser() throws SQLException {
-    assertThat(UserRepository.findById(21)).isNotNull();
-  }
+    @Test
+    public void ReturnsAUser() throws SQLException {
+        assertThat(new UserRepository().findById(21)).isNotNull();
+    }
 
-  @Test
-  public void FindsUserWithCorrectId() throws SQLException {
-    var user = UserRepository.findById(21);
-    assertThat(user.getUsername()).isEqualTo("Earl.Pollich76");
-  }
+    @Test
+    public void FindsUserWithCorrectId() throws SQLException {
+        var user = new UserRepository().findById(21);
+        assertThat(user.getUsername()).isEqualTo("Earl.Pollich76");
+    }
 }

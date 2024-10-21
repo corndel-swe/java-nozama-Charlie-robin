@@ -1,35 +1,52 @@
 package com.corndel.nozama;
 
-import com.corndel.nozama.repositories.UserRepository;
+import controllers.ProductController;
+import controllers.ReviewController;
+import controllers.UserController;
 import io.javalin.Javalin;
-import io.javalin.http.HttpStatus;
+
+import static io.javalin.apibuilder.ApiBuilder.*;
 
 public class App {
-  private Javalin app;
+    private final Javalin app;
 
-  public static void main(String[] args) {
-    var app = new App().javalinApp();
-    app.start(8080);
-  }
+    public static void main(String[] args) {
+        var app = new App().javalinApp();
+        app.start(8080);
+    }
 
-  public App() {
-    app = Javalin.create();
-    app.get(
-        "/",
-        ctx -> {
-          var users = UserRepository.findAll();
-          ctx.json(users);
+    public App() {
+        app = Javalin.create(config ->
+                config.router.apiBuilder(() -> {
+                    path("/users", () -> {
+                        post("", UserController::create);
+                        get("", UserController::findAll);
+                        get("/{userId}", UserController::findById);
+                        delete("/{userId}", UserController::delete);
+                        post("/users/login", UserController::login);
+                    });
+                    path("/products", () -> {
+                        post("", ProductController::create);
+                        get("", ProductController::findAll);
+                        get("/category/{categoryId}", ProductController::findByCategory);
+                        path("/{productId}", () -> {
+                            get("", ProductController::findById);
+                            post("/reviews", ReviewController::create);
+                            get("/reviews", ReviewController::findAllByProductId);
+                            get("/reviews/average", ReviewController::findAverageRatingByProductId);
+                        });
+                    });
+                }));
+
+        app.exception(RuntimeException.class, (e, ctx) -> {
+            ctx.status(500);
+            ctx.result(e.getMessage());
         });
-    app.get(
-        "/users/{userId}",
-        ctx -> {
-          var id = Integer.parseInt(ctx.pathParam("userId"));
-          var user = UserRepository.findById(id);
-          ctx.status(HttpStatus.IM_A_TEAPOT).json(user);
-        });
-  }
+    }
 
-  public Javalin javalinApp() {
-    return app;
-  }
+    public Javalin javalinApp() {
+        return app;
+    }
+
+
 }
