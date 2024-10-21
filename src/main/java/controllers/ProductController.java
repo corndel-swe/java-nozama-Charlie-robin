@@ -14,13 +14,15 @@ import java.util.List;
 
 public class ProductController {
 
+    private static final ProductRepository productRepository = new ProductRepository();
+
     // CREATE
 
     public static void create(Context context) {
         Product product = Product.of(context);
 
         try {
-            product = ProductRepository.create(product);
+            product = productRepository.create(product);
 
             if (product == null) throw new NotFoundResponse();
 
@@ -35,7 +37,7 @@ public class ProductController {
 
     public static void findAll(Context context) {
         try {
-            context.status(HttpStatus.OK).json(ProductRepository.findAll());
+            context.status(HttpStatus.OK).json(productRepository.findAll());
         } catch (SQLException e) {
             throw new NotFoundResponse(e.getMessage());
         }
@@ -45,7 +47,7 @@ public class ProductController {
         int id = PathParam.getIntegerOrThrow(context, "productId");
 
         try {
-            Product product = ProductRepository.findById(id);
+            Product product = productRepository.findById(id);
 
             if (product == null) throw new NotFoundResponse();
 
@@ -60,7 +62,7 @@ public class ProductController {
         int id = PathParam.getIntegerOrThrow(context, "categoryId");
 
         try {
-            List<Product> products = ProductRepository.findByCategory(id);
+            List<Product> products = productRepository.findByCategory(id);
             context.status(HttpStatus.OK).json(products);
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
