@@ -69,6 +69,7 @@
   </dependencies>
 
   <build>
+    <finalName>app</finalName>
     <plugins>
       <plugin>
         <groupId>org.flywaydb</groupId>
@@ -107,7 +108,7 @@
             <configuration>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass>com.corndel.framerate.App</mainClass>
+                  <mainClass>com.corndel.nozama.App</mainClass>
                 </transformer>
               </transformers>
               <filters>

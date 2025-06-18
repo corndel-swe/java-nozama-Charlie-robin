@@ -1,4 +1,4 @@
-package controllers;
+package com.corndel.nozama.controllers;
 
 import com.corndel.nozama.models.Product;
 import com.corndel.nozama.repositories.ProductRepository;
