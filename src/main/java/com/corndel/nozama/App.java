@@ -1,11 +1,12 @@
 package com.corndel.nozama;
 
-import controllers.ProductController;
-import controllers.ReviewController;
-import controllers.UserController;
 import io.javalin.Javalin;
 
 import static io.javalin.apibuilder.ApiBuilder.*;
+
+import com.corndel.nozama.controllers.ProductController;
+import com.corndel.nozama.controllers.ReviewController;
+import com.corndel.nozama.controllers.UserController;
 
 public class App {
     private final Javalin app;

@@ -1,4 +1,4 @@
-package controllers;
+package com.corndel.nozama.controllers;
 
 import com.corndel.nozama.models.Auth;
 import com.corndel.nozama.models.User;
