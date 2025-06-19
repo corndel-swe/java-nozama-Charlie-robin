@@ -1,5 +1,5 @@
 name: Autograding Tests
-'on':
+"on":
   - push
   - repository_dispatch
 permissions:
@@ -17,16 +17,21 @@ jobs:
       - name: Set up Java 21
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Write secrets to .env file
+        run: |
+          echo "DB_URL=${{ secrets.DB_URL }}" >> .env
+        shell: bash
 
       - name: Day 1 Exercise 1
         id: D1E1
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D1E1
-          setup-command: ''
-          command: './mvnw test -Dtest=D1E1Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D1E1Tests"
           timeout: 1
           max-score: 1
 
@@ -35,8 +40,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D1E2
-          setup-command: ''
-          command: './mvnw test -Dtest=D1E2Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D1E2Tests"
           timeout: 1
           max-score: 1
 
@@ -45,8 +50,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D1E3
-          setup-command: ''
-          command: './mvnw test -Dtest=D1E3Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D1E3Tests"
           timeout: 1
           max-score: 1
 
@@ -55,8 +60,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D1E4
-          setup-command: ''
-          command: './mvnw test -Dtest=D1E4Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D1E4Tests"
           timeout: 1
           max-score: 1
 
@@ -65,8 +70,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D2E1
-          setup-command: ''
-          command: './mvnw test -Dtest=D2E1Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D2E1Tests"
           timeout: 1
           max-score: 1
 
@@ -75,8 +80,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D2E2
-          setup-command: ''
-          command: './mvnw test -Dtest=D2E2Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D2E2Tests"
           timeout: 1
           max-score: 1
 
@@ -85,8 +90,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D2E3
-          setup-command: ''
-          command: './mvnw test -Dtest=D2E3Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D2E3Tests"
           timeout: 1
           max-score: 1
 
@@ -95,8 +100,8 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D3E1
-          setup-command: ''
-          command: './mvnw test -Dtest=D3E1Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D3E1Tests"
           timeout: 1
           max-score: 1
 
@@ -105,22 +110,22 @@ jobs:
         uses: classroom-resources/autograding-command-grader@v1
         with:
           test-name: D3E2
-          setup-command: ''
-          command: './mvnw test -Dtest=D3E2Tests'
+          setup-command: ""
+          command: "./mvnw test -Dtest=D3E2Tests"
           timeout: 1
           max-score: 1
 
       - name: Autograding Reporter
         uses: classroom-resources/autograding-grading-reporter@v1
         env:
-          D1E1_RESULTS: '${{steps.D1E1.outputs.result}}'
-          D1E2_RESULTS: '${{steps.D1E2.outputs.result}}'
-          D1E3_RESULTS: '${{steps.D1E3.outputs.result}}'
-          D1E4_RESULTS: '${{steps.D1E4.outputs.result}}'
-          D2E1_RESULTS: '${{steps.D2E1.outputs.result}}'
-          D2E2_RESULTS: '${{steps.D2E2.outputs.result}}'
-          D2E3_RESULTS: '${{steps.D2E3.outputs.result}}'
-          D3E1_RESULTS: '${{steps.D3E1.outputs.result}}'
-          D3E2_RESULTS: '${{steps.D3E2.outputs.result}}'
+          D1E1_RESULTS: "${{steps.D1E1.outputs.result}}"
+          D1E2_RESULTS: "${{steps.D1E2.outputs.result}}"
+          D1E3_RESULTS: "${{steps.D1E3.outputs.result}}"
+          D1E4_RESULTS: "${{steps.D1E4.outputs.result}}"
+          D2E1_RESULTS: "${{steps.D2E1.outputs.result}}"
+          D2E2_RESULTS: "${{steps.D2E2.outputs.result}}"
+          D2E3_RESULTS: "${{steps.D2E3.outputs.result}}"
+          D3E1_RESULTS: "${{steps.D3E1.outputs.result}}"
+          D3E2_RESULTS: "${{steps.D3E2.outputs.result}}"
         with:
           runners: D1E1,D1E2,D1E3,D1E4,D2E1,D2E2,D2E3,D3E1,D3E2
